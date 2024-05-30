@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 using Models;
 using System.Drawing;
 using System.Text;
@@ -103,7 +104,10 @@ namespace Repositories
 
                 };
                 cmd.Parameters.Add(new SqlParameter("@Id", id));
-                cmd.ExecuteNonQuery();
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    result = true;
+                };
 
                 result = true;
             }
@@ -156,24 +160,25 @@ namespace Repositories
             return cars;
         }
 
-        public Car Get(int id)
+        public Car? Get(int id)
         {
-            var car = new Car();
+            Car? car = null;
             try
             {
                 _connection.Open();
                 var cmd = new SqlCommand
                 {
                     Connection = _connection,
-                    CommandText = Car.GET_ALL
+                    CommandText = Car.GET
                 };
                 cmd.Parameters.Add(new SqlParameter("@Id", id));
                 cmd.ExecuteNonQuery();
 
                 using (var reader = cmd.ExecuteReader())
                 {
-                    while (reader.Read())
+                    if (reader.Read())
                     {
+                        car = new Car();
                         car.Id = reader.GetInt32(0);
                         car.Name = reader.GetString(1);
                         car.Color = reader.GetString(2);

@@ -66,7 +66,7 @@ namespace Introducao_MVC
                         }
                         else
                         {
-                            Console.WriteLine("Erro ao Buscar Registro.");
+                            Console.WriteLine("Registro não encontrado.");
                         }
                         break;
                     case 0:
@@ -76,6 +76,7 @@ namespace Introducao_MVC
                         Console.WriteLine("Valor inválido");
                         break;
                 }
+                Console.ReadLine();
             }
             while (option > 0);
         }
